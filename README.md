@@ -1,2 +1,2 @@
 # UnderstandingCaffe
-An attempt to visualize how neural networks work in Caffe
+An attempt to understand in a deep, yet simple way how and why convolutional neural networks work.
