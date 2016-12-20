@@ -1,0 +1,86 @@
+name: "SimpleNet_1.0"
+input: "data"
+input_dim: 1
+input_dim: 3
+input_dim: 13
+input_dim: 13
+
+layer {
+  bottom: "data"
+  top: "conv1/3x3_s1"
+  name: "conv1/3x3_s1"
+  type: "Convolution"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 2
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+
+layer {
+  bottom: "conv1/3x3_s1"
+  top: "conv1/relu"
+  name: "conv1/relu"
+  type: "ReLU"
+}
+
+layer {
+  bottom: "conv1/relu"
+  top: "pool1/3x3_s1"
+  name: "pool1/3x3_s1"
+  type: "Pooling"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 1
+  }
+}
+
+layer {
+  bottom: "pool1/3x3_s1"
+  top: "loss/classifier"
+  name: "loss/classifier"
+  type: "InnerProduct"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 2
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+
+layer {
+  name: "prob"
+  type: "Softmax"
+  bottom: "loss/classifier"
+  top: "prob"
+}
